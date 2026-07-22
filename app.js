@@ -1,0 +1,1 @@
+console.log("Equipment Tracker JS Loaded!");

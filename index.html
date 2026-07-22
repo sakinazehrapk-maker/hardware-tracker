@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hardware Asset Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Hardware Tracker</h1>
+    <p>Manage component check-outs</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>Add New Equipment</h2>
+      <form id="add-equipment-form">
+        <input type="text" id="item-name" placeholder="Item Name (e.g., Oscilloscope)" required>
+        <input type="text" id="asset-id" placeholder="Asset ID (e.g., OSC-01)" required>
+        <button type="submit">Add Equipment</button>
+      </form>
+    </section>
+    <section class="card">
+      <h2>Equipment List</h2>
+      <ul id="equipment-list">
+      </ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
