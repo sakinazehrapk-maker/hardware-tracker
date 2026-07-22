@@ -117,6 +117,7 @@ function exportToCSV() {
   document.body.removeChild(link);
 }
 function renderEquipmentList() {
+    updateStats();
   equipmentList.innerHTML = '';
   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
   const filteredItems = equipmentItems.filter((item) => {
@@ -174,4 +175,14 @@ if (searchInput) searchInput.addEventListener('input', renderEquipmentList);
 if (exportBtn) exportBtn.addEventListener('click', exportToCSV);
 window.toggleStatus = toggleStatus;
 window.deleteItem = deleteItem;
+function updateStats() {
+  const total = equipmentItems.length;
+  const available = equipmentItems.filter(item => item.status === 'Available').length;
+  const checkedOut = equipmentItems.filter(item => item.status === 'Checked Out').length;
+  const overdue = equipmentItems.filter(item => item.status === 'Checked Out' && isOverdue(item.dueDate)).length;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-available').textContent = available;
+  document.getElementById('stat-checkedout').textContent = checkedOut;
+  document.getElementById('stat-overdue').textContent = overdue;
+}
 renderEquipmentList();

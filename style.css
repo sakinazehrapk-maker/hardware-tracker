@@ -166,3 +166,48 @@ body.dark-mode .badge-overdue {
   50% { opacity: 0.6; }
   100% { opacity: 1; }
 }
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--card-bg);
+  padding: 14px 16px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--subtext-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--heading-color);
+}
+.stat-available {
+  color: #28a745;
+}
+.stat-checkout {
+  color: #dd6b20;
+}
+.stat-overdue {
+  color: #e53e3e;
+}
+body.dark-mode .stat-available {
+  color: #48bb78;
+}
+body.dark-mode .stat-checkout {
+  color: #ed8936;
+}
+body.dark-mode .stat-overdue {
+  color: #fc8181;
+}
