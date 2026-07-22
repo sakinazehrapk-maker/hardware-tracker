@@ -6,6 +6,8 @@ const searchInput = document.getElementById('search-input');
 const exportBtn = document.getElementById('export-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const currentTheme = localStorage.getItem('theme');
+const itemCategoryInput = document.getElementById('item-category');
+const categoryChipsContainer = document.getElementById('category-chips');
 if (currentTheme === 'dark') {
   document.body.classList.add('dark-mode');
   if (themeToggleBtn) themeToggleBtn.textContent = 'Light Mode';
@@ -24,6 +26,7 @@ if (themeToggleBtn) {
   });
 }
 let equipmentItems = JSON.parse(localStorage.getItem('equipmentItems')) || [];
+let activeCategoryFilter = 'All';
 function saveToLocalStorage() {
   localStorage.setItem('equipmentItems', JSON.stringify(equipmentItems));
 }
@@ -31,11 +34,13 @@ equipmentForm.addEventListener('submit', function (event) {
   event.preventDefault();
   const name = itemNameInput.value.trim();
   const assetId = assetIdInput.value.trim();
+  const category = itemCategoryInput ? itemCategoryInput.value : 'General';
   if (!name || !assetId) return;
   const newEquipment = {
     id: Date.now(),
     name: name,
     assetId: assetId,
+    category: category,
     status: 'Available',
     borrower: null,
     dueDate: null,
@@ -91,15 +96,41 @@ function isOverdue(dueDateStr) {
   const today = new Date().toISOString().split('T')[0];
   return dueDateStr < today;
 }
+function updateStats() {
+  const total = equipmentItems.length;
+  const available = equipmentItems.filter(item => item.status === 'Available').length;
+  const checkedOut = equipmentItems.filter(item => item.status === 'Checked Out').length;
+  const overdue = equipmentItems.filter(item => item.status === 'Checked Out' && isOverdue(item.dueDate)).length;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-available').textContent = available;
+  document.getElementById('stat-checkedout').textContent = checkedOut;
+  document.getElementById('stat-overdue').textContent = overdue;
+}
+function renderCategoryChips() {
+  if (!categoryChipsContainer) return;
+  const categories = ['All', 'Microcontrollers', 'Testing Gear', 'Sensors', 'Tools & Components', 'General']; 
+  categoryChipsContainer.innerHTML = '';
+  categories.forEach((cat) => {
+    const chip = document.createElement('button');
+    chip.className = `chip ${activeCategoryFilter === cat ? 'active' : ''}`;
+    chip.textContent = cat;
+    chip.onclick = () => {
+      activeCategoryFilter = cat;
+      renderEquipmentList();
+    };
+    categoryChipsContainer.appendChild(chip);
+  });
+}
 function exportToCSV() {
   if (equipmentItems.length === 0) {
     alert('No equipment items to export!');
     return;
   }
-  const headers = ['Asset ID', 'Item Name', 'Status', 'Borrower', 'Due Date', 'Is Overdue'];
+  const headers = ['Asset ID', 'Item Name', 'Category', 'Status', 'Borrower', 'Due Date', 'Is Overdue'];
   const rows = equipmentItems.map((item) => [
     `"${item.assetId.replace(/"/g, '""')}"`,
     `"${item.name.replace(/"/g, '""')}"`,
+    `"${(item.category || 'General').replace(/"/g, '""')}"`,
     `"${item.status}"`,
     `"${(item.borrower || 'N/A').replace(/"/g, '""')}"`,
     `"${item.dueDate || 'N/A'}"`,
@@ -109,7 +140,7 @@ function exportToCSV() {
     + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement('a');
-  const today = new Date().toISOString().slice(0, 10); 
+  const today = new Date().toISOString().slice(0, 10);
   link.setAttribute('href', encodedUri);
   link.setAttribute('download', `equipment_inventory_${today}.csv`);
   document.body.appendChild(link);
@@ -117,14 +148,16 @@ function exportToCSV() {
   document.body.removeChild(link);
 }
 function renderEquipmentList() {
-    updateStats();
+  updateStats();
+  renderCategoryChips();
   equipmentList.innerHTML = '';
   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
   const filteredItems = equipmentItems.filter((item) => {
+    const categoryMatch = activeCategoryFilter === 'All' || item.category === activeCategoryFilter;
     const nameMatch = item.name.toLowerCase().includes(searchTerm);
     const idMatch = item.assetId.toLowerCase().includes(searchTerm);
     const borrowerMatch = item.borrower ? item.borrower.toLowerCase().includes(searchTerm) : false;
-    return nameMatch || idMatch || borrowerMatch;
+    return categoryMatch && (nameMatch || idMatch || borrowerMatch);
   });
   if (filteredItems.length === 0) {
     equipmentList.innerHTML = '<li style="color: var(--subtext-color);">No matching equipment found.</li>';
@@ -154,6 +187,7 @@ function renderEquipmentList() {
       <div>
         <strong>${item.name}</strong> 
         <span style="color: var(--subtext-color); font-size: 0.85rem; margin-left: 6px;">(${item.assetId})</span>
+        <span class="category-tag">${item.category || 'General'}</span>
         <span style="${badgeStyle} padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-left: 8px;">
           ${item.status}
         </span>
@@ -175,14 +209,4 @@ if (searchInput) searchInput.addEventListener('input', renderEquipmentList);
 if (exportBtn) exportBtn.addEventListener('click', exportToCSV);
 window.toggleStatus = toggleStatus;
 window.deleteItem = deleteItem;
-function updateStats() {
-  const total = equipmentItems.length;
-  const available = equipmentItems.filter(item => item.status === 'Available').length;
-  const checkedOut = equipmentItems.filter(item => item.status === 'Checked Out').length;
-  const overdue = equipmentItems.filter(item => item.status === 'Checked Out' && isOverdue(item.dueDate)).length;
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-available').textContent = available;
-  document.getElementById('stat-checkedout').textContent = checkedOut;
-  document.getElementById('stat-overdue').textContent = overdue;
-}
 renderEquipmentList();

@@ -41,6 +41,13 @@
       <form id="add-equipment-form">
         <input type="text" id="item-name" placeholder="Item Name (e.g., Oscilloscope)" required>
         <input type="text" id="asset-id" placeholder="Asset ID (e.g., OSC-01)" required>
+        <select id="item-category" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--input-border); background: var(--card-bg); color: var(--text-color);">
+          <option value="Microcontrollers">Microcontrollers</option>
+          <option value="Testing Gear">Testing Gear</option>
+          <option value="Sensors">Sensors</option>
+          <option value="Tools & Components">Tools & Components</option>
+          <option value="General">General</option>
+        </select>
         <button type="submit">Add Equipment</button>
       </form>
     </section>
@@ -51,14 +58,11 @@
           Export CSV
         </button>
       </div>
-      <div style="margin-bottom: 16px;">
-        <input type="text" id="search-input" placeholder=" Search equipment, Asset ID, or borrower..." style="width: 100%;">
+      <div id="category-chips" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
       </div>
-      <ul id="equipment-list">
-      </ul>
-    </section>
-    <section class="card">
-      <h2>Equipment List</h2>
+      <div style="margin-bottom: 16px;">
+        <input type="text" id="search-input" placeholder="🔍 Search equipment, Asset ID, or borrower..." style="width: 100%;">
+      </div>
       <ul id="equipment-list">
       </ul>
     </section>
