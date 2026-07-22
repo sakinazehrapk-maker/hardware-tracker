@@ -70,3 +70,27 @@ li {
 li:last-child {
   border-bottom: none;
 }
+.action-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 4px;
+}
+.btn-checkout {
+  background-color: #dd6b20;
+}
+.btn-checkout:hover {
+  background-color: #c05621;
+}
+.btn-checkin {
+  background-color: #38a169;
+}
+.btn-checkin:hover {
+  background-color: #2f855a;
+}
+.btn-delete {
+  background-color: #e53e3e;
+}
+.btn-delete:hover {
+  background-color: #c53030;
+}
