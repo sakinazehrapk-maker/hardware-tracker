@@ -3,6 +3,7 @@ const itemNameInput = document.getElementById('item-name');
 const assetIdInput = document.getElementById('asset-id');
 const equipmentList = document.getElementById('equipment-list');
 const searchInput = document.getElementById('search-input');
+const exportBtn = document.getElementById('export-btn');
 let equipmentItems = JSON.parse(localStorage.getItem('equipmentItems')) || [];
 function saveToLocalStorage() {
   localStorage.setItem('equipmentItems', JSON.stringify(equipmentItems));
@@ -56,6 +57,29 @@ function deleteItem(id) {
   saveToLocalStorage();
   renderEquipmentList();
 }
+function exportToCSV() {
+  if (equipmentItems.length === 0) {
+    alert('No equipment items to export!');
+    return;
+  }
+  const headers = ['Asset ID', 'Item Name', 'Status', 'Borrower'];
+  const rows = equipmentItems.map((item) => [
+    `"${item.assetId.replace(/"/g, '""')}"`,
+    `"${item.name.replace(/"/g, '""')}"`,
+    `"${item.status}"`,
+    `"${(item.borrower || 'N/A').replace(/"/g, '""')}"`
+  ]);
+  const csvContent = 'data:text/csv;charset=utf-8,' 
+    + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  const today = new Date().toISOString().slice(0, 10);
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `equipment_inventory_${today}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 function renderEquipmentList() {
   equipmentList.innerHTML = '';
   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -77,7 +101,7 @@ function renderEquipmentList() {
     const actionText = isAvailable ? 'Check Out' : 'Check In';
     const actionBtnClass = isAvailable ? 'btn-checkout' : 'btn-checkin';
     const borrowerText = item.borrower 
-      ? `<div style="font-size: 0.8rem; color: #e53e3e; margin-top: 4px;">Checked out to: <strong>${item.borrower}</strong></div>`
+      ? `<div style="font-size: 0.8rem; color: #e53e3e; margin-top: 4px;">👤 Checked out to: <strong>${item.borrower}</strong></div>`
       : '';
     const li = document.createElement('li');
     li.innerHTML = `
@@ -103,6 +127,9 @@ function renderEquipmentList() {
 }
 if (searchInput) {
   searchInput.addEventListener('input', renderEquipmentList);
+}
+if (exportBtn) {
+  exportBtn.addEventListener('click', exportToCSV);
 }
 window.toggleStatus = toggleStatus;
 window.deleteItem = deleteItem;

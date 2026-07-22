@@ -21,9 +21,14 @@
       </form>
     </section>
     <section class="card">
-      <h2>Equipment List</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="margin-bottom: 0;">Equipment List</h2>
+        <button id="export-btn" style="background-color: #2b6cb0; font-size: 0.85rem; padding: 6px 12px;">
+          Export CSV
+        </button>
+      </div>
       <div style="margin-bottom: 16px;">
-        <input type="text" id="search-input" placeholder="Search equipment, Asset ID, or borrower..." style="width: 100%;">
+        <input type="text" id="search-input" placeholder=" Search equipment, Asset ID, or borrower..." style="width: 100%;">
       </div>
       <ul id="equipment-list">
       </ul>
