@@ -145,3 +145,24 @@ input {
 li {
   border-bottom: 1px solid var(--border-color);
 }
+.badge-overdue {
+  background: #fff5f5;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+body.dark-mode .badge-overdue {
+  background: #742a2a;
+  color: #fed7d7;
+  border-color: #9b2c2c;
+}
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
