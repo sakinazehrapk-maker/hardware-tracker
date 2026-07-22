@@ -94,3 +94,54 @@ li:last-child {
 .btn-delete:hover {
   background-color: #c53030;
 }
+:root {
+  --bg-color: #f4f6f8;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --heading-color: #1a202c;
+  --subtext-color: #718096;
+  --border-color: #edf2f7;
+  --input-border: #cbd5e0;
+}
+body.dark-mode {
+  --bg-color: #1a202c;
+  --card-bg: #2d3748;
+  --text-color: #e2e8f0;
+  --heading-color: #f7fafc;
+  --subtext-color: #a0aec0;
+  --border-color: #4a5568;
+  --input-border: #4a5568;
+}
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+header h1 {
+  font-size: 1.8rem;
+  color: var(--heading-color);
+}
+header p {
+  color: var(--subtext-color);
+}
+.card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+.card h2 {
+  color: var(--heading-color);
+}
+input {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+li {
+  border-bottom: 1px solid var(--border-color);
+}

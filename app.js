@@ -4,6 +4,8 @@ const assetIdInput = document.getElementById('asset-id');
 const equipmentList = document.getElementById('equipment-list');
 const searchInput = document.getElementById('search-input');
 const exportBtn = document.getElementById('export-btn');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const currentTheme = localStorage.getItem('theme');
 let equipmentItems = JSON.parse(localStorage.getItem('equipmentItems')) || [];
 function saveToLocalStorage() {
   localStorage.setItem('equipmentItems', JSON.stringify(equipmentItems));
@@ -130,6 +132,23 @@ if (searchInput) {
 }
 if (exportBtn) {
   exportBtn.addEventListener('click', exportToCSV);
+}
+if (currentTheme === 'dark') {
+  document.body.classList.add('dark-mode');
+  if (themeToggleBtn) themeToggleBtn.textContent = 'Light Mode';
+}
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    let theme = 'light';
+    if (document.body.classList.contains('dark-mode')) {
+      theme = 'dark';
+      themeToggleBtn.textContent = 'Light Mode';
+    } else {
+      themeToggleBtn.textContent = 'Dark Mode';
+    }
+    localStorage.setItem('theme', theme);
+  });
 }
 window.toggleStatus = toggleStatus;
 window.deleteItem = deleteItem;
