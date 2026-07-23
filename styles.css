@@ -236,3 +236,33 @@ body.dark-mode .stat-overdue {
   color: var(--subtext-color);
   margin-left: 6px;
 }
+.btn-history {
+  background-color: #718096;
+}
+.btn-history:hover {
+  background-color: #4a5568;
+}
+.history-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.history-item:last-child {
+  border-bottom: none;
+}
+.history-action {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.history-action.checkout {
+  color: #dd6b20;
+}
+.history-action.checkin {
+  color: #38a169;
+}
+.history-meta {
+  font-size: 0.75rem;
+  color: var(--subtext-color);
+  margin-top: 2px;
+}
