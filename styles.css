@@ -263,3 +263,29 @@
     color: var(--muted);
   }
 }
+  .alert-banner {
+    background: #fff5f5;
+    border: 2px solid var(--red);
+    border-radius: var(--radii-extra);
+    padding: var(--spacing-3) var(--spacing-4);
+    box-shadow: var(--shadow-card);
+    animation: fadeIn 0.3s ease;
+  }
+  body.dark-mode .alert-banner {
+    background: #2d1215;
+  }
+  .alert-banner h3 {
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+  }
+  .alert-banner-item {
+    font-size: var(--font-2);
+    padding: var(--spacing-1) 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .alert-banner-item:last-child {
+    border-bottom: none;
+  }

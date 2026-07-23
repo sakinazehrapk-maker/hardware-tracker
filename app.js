@@ -12,6 +12,47 @@ const modalTitle = document.getElementById('modal-title');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const currentTheme = localStorage.getItem('theme');
+const overdueBanner = document.getElementById('overdue-banner');
+function getDaysOverdue(dueDateStr) {
+  if (!dueDateStr) return 0;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const due = new Date(dueDateStr);
+  due.setHours(0, 0, 0, 0);
+  const diffTime = today - due;
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+}
+function renderOverdueBanner() {
+  if (!overdueBanner) return;
+
+  const overdueItems = equipmentItems.filter(
+    (item) => item.status === 'Checked Out' && isOverdue(item.dueDate)
+  );
+
+  if (overdueItems.length === 0) {
+    overdueBanner.style.display = 'none';
+    overdueBanner.innerHTML = '';
+    return;
+  }
+  const itemsHtml = overdueItems
+    .map((item) => {
+      const days = getDaysOverdue(item.dueDate);
+      const daysText = days === 1 ? '1 day' : `${days} days`;
+      return `
+        <div class="alert-banner-item">
+        <strong>${item.name}</strong> (${item.assetId}) — Borrowed by <strong>${item.borrower}</strong> | Due: <strong>${item.dueDate}</strong> (<span style="color: var(--red); font-weight: bold;">${daysText} overdue</span>)
+        </div>
+      `;
+    })
+    .join('');
+  overdueBanner.innerHTML = `
+    <div class="alert-banner">
+      <h3>Action Required: ${overdueItems.length} Overdue Item${overdueItems.length > 1 ? 's' : ''}</h3>
+      ${itemsHtml}
+    </div>
+  `;
+  overdueBanner.style.display = 'block';
+}
 if (currentTheme === 'dark') {
   document.body.classList.add('dark-mode');
   if (themeToggleBtn) themeToggleBtn.textContent = 'Light Mode';
@@ -211,6 +252,7 @@ function exportToCSV() {
 function renderEquipmentList() {
   updateStats();
   renderCategoryChips();
+  renderOverdueBanner();
   equipmentList.innerHTML = '';
   const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
   const filteredItems = equipmentItems.filter((item) => {
@@ -275,3 +317,4 @@ window.toggleStatus = toggleStatus;
 window.showHistory = showHistory;
 window.deleteItem = deleteItem;
 renderEquipmentList();
+renderOverdueBanner();
